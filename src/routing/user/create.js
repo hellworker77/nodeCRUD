@@ -1,20 +1,22 @@
-const data = require('../../storage/data')
-const errors = require('../errors')
+const sqliteData = require('../../storages/sqliteData')
+
+const responseWrappers = require('../responseWrappers')
 const utilities = require('../utilities')
 
-module.exports = (request, response) => {
+module.exports = async (request, response) => {
     let json = ''
 
-    request.on('data', chunk => {
+    await request.on('data', chunk => {
         json += chunk
     })
 
-    request.on('end', () => {
+    await request.on('end', async () => {
+
         const body = JSON.parse(json)
 
         let validationResult = utilities.validate(body)
         if(validationResult.status === utilities.INVALID){
-            errors.userWrongDataProvided(response, validationResult.errors)
+            responseWrappers.userWrongDataProvided(response, validationResult.errors)
             return
         }
         utilities.normalize(body)
@@ -24,9 +26,7 @@ module.exports = (request, response) => {
             age: parseInt(body.age)
         }
 
-        data.addUser(user);
-        response.writeHead(200)
-        response.end(JSON.stringify(user))
-
+        let cratedUser = await sqliteData.createUser(user);
+        responseWrappers.successfulResponse(response, cratedUser)
     })
 }

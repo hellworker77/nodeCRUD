@@ -1,26 +1,26 @@
-const data = require('../../storage/data')
-const errors = require('../errors')
+
+const sqliteData = require('../../storages/sqliteData')
+
+const responseWrappers = require('../responseWrappers')
 const utilities = require("../utilities");
 
-module.exports = (request, response) => {
+module.exports = async (request, response) => {
     const id = parseInt(request.url.split('/')[2])
     let json = ''
 
-    if(!data.exists(id)){
-        errors.userWithIdNotFound(response, id)
-        return;
-    }
-
-    request.on('data', chunk => {
+    await request.on('data', chunk => {
         json += chunk
     })
 
-    return request.on('end', () => {
+    await request.on('end', async () => {
+
         const body = JSON.parse(json)
 
         let validationResult = utilities.validate(body)
         if(validationResult.status === utilities.INVALID){
-            errors.userWrongDataProvided(response, validationResult.errors)
+
+            responseWrappers.userWrongDataProvided(response, validationResult.errors)
+
             return
         }
 
@@ -31,9 +31,11 @@ module.exports = (request, response) => {
             age: parseInt(body.age)
         }
 
-        let updatedUser = data.updateUser(id, user)
 
-        response.writeHead(200)
-        response.end(JSON.stringify(updatedUser))
+        let updatedUser = await sqliteData.updateUser(id, user)
+
+        responseWrappers.successfulResponse(response, updatedUser)
+
+
     })
 }

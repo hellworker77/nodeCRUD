@@ -1,14 +1,16 @@
-const data = require('../../storage/data')
-const errors = require('../errors')
 
-module.exports = (request, response) => {
+const sqliteData = require('../../storages/sqliteData')
+const responseWrappers = require('../responseWrappers')
+
+module.exports = async (request, response) => {
     const id = parseInt(request.url.split('/')[2])
-    const user = data.getUserById(id)
 
+    const user = await sqliteData.getUserById(id)
     if(user){
-        response.writeHead(200)
-        response.end(JSON.stringify(user))
+        responseWrappers.successfulResponse(response, user)
         return
     }
-    errors.userWithIdNotFound(response, id)
+
+    responseWrappers.userWithIdNotFound(response, id)
+
 }

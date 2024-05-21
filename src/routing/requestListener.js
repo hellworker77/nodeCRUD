@@ -1,7 +1,12 @@
 const routes = require('./user/routes')
-const requestListener = (request, response) => {
+const responseWrappers = require('./responseWrappers')
+const requestListener = async (request, response) => {
     response.setHeader('Content-Type', 'application/json')
-    routes(request, response)
+    try{
+        await routes(request, response)
+    }catch (error){
+        responseWrappers.internalServerError(response, error)
+    }
 }
 
 

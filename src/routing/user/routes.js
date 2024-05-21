@@ -4,25 +4,29 @@ const getById = require('./getById')
 const create = require('./create')
 const update = require('./update')
 const deleteById = require('./deleteById')
-const erorrs = require('../errors')
-const userRoutes = (request, response) => {
+
+const responseWrappers = require('../responseWrappers')
+const userRoutes = async (request, response) => {
+
     const requestUrl = url.parse(request.url, true)
     const requestMethod = request.method
     const requestPath = requestUrl.pathname
 
 
     if (requestPath === '/users' && requestMethod === "GET") {
-       getAll(request, response)
+
+        await getAll(request, response)
     } else if (requestPath.startsWith('/users/') && requestMethod === "GET") {
-        getById(request, response)
+        await getById(request, response)
     } else if (requestPath === '/users/' && requestMethod === "POST") {
-        create(request, response)
+        await create(request, response)
     } else if (requestPath.startsWith('/users/') && requestMethod === "PUT") {
-        update(request, response)
+        await update(request, response)
     } else if (requestPath.startsWith('/users/') && requestMethod === "DELETE") {
-        deleteById(request, response)
+        await deleteById(request, response)
     } else {
-        erorrs.responseRouteNotFound(response)
+        responseWrappers.responseRouteNotFound(response)
+
     }
 }
 
