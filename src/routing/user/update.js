@@ -1,3 +1,4 @@
+
 const sqliteData = require('../../storages/sqliteData')
 
 const responseWrappers = require('../responseWrappers')
@@ -12,11 +13,14 @@ module.exports = async (request, response) => {
     })
 
     await request.on('end', async () => {
+
         const body = JSON.parse(json)
 
         let validationResult = utilities.validate(body)
         if(validationResult.status === utilities.INVALID){
+
             responseWrappers.userWrongDataProvided(response, validationResult.errors)
+
             return
         }
 
@@ -27,8 +31,11 @@ module.exports = async (request, response) => {
             age: parseInt(body.age)
         }
 
+
         let updatedUser = await sqliteData.updateUser(id, user)
 
         responseWrappers.successfulResponse(response, updatedUser)
+
+
     })
 }

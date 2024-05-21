@@ -4,14 +4,17 @@ const getById = require('./getById')
 const create = require('./create')
 const update = require('./update')
 const deleteById = require('./deleteById')
+
 const responseWrappers = require('../responseWrappers')
 const userRoutes = async (request, response) => {
+
     const requestUrl = url.parse(request.url, true)
     const requestMethod = request.method
     const requestPath = requestUrl.pathname
 
 
     if (requestPath === '/users' && requestMethod === "GET") {
+
         await getAll(request, response)
     } else if (requestPath.startsWith('/users/') && requestMethod === "GET") {
         await getById(request, response)
@@ -23,6 +26,7 @@ const userRoutes = async (request, response) => {
         await deleteById(request, response)
     } else {
         responseWrappers.responseRouteNotFound(response)
+
     }
 }
 

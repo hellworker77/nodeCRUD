@@ -2,7 +2,9 @@ const http = require('http');
 const requestListener = require('./routing/requestListener')
 
 const server = http.createServer((req , res) => {
+
     requestListener(req, res).then()
+
 });
 
 const port = 8080

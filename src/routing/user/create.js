@@ -11,6 +11,7 @@ module.exports = async (request, response) => {
     })
 
     await request.on('end', async () => {
+
         const body = JSON.parse(json)
 
         let validationResult = utilities.validate(body)
