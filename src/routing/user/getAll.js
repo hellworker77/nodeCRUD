@@ -1,7 +1,6 @@
-const data = require('../../storage/data')
+const sqliteData = require('../../storages/sqliteData')
+const responseWrappers = require('../responseWrappers')
 
-
-module.exports = (request, response) => {
-    response.writeHead(200)
-    response.end(JSON.stringify(data.getUsers()))
+module.exports = async (request, response) => {
+    responseWrappers.successfulResponse(response, await sqliteData.getUsers())
 }

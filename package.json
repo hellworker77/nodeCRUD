@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "FelMan",
   "license": "ISC",
-  "description": "",
+  "description": "Project",
   "dependencies": {
-    "@types/node": "^20.12.12"
+    "@types/node": "^20.12.12",
+    "sqlite3": "^5.1.7"
   }
 }

@@ -2,12 +2,12 @@ const users = []
 let currentId = 1
 
 module.exports = {
-    exists: (id) => users.findIndex(x=>x.id === id) !== -1,
     getUsers: () => users,
-    getUserById: (id) => users.find(x=>x.id === id),
+    getUserById: (id) => new Promise(resolve => users.find(x=>x.id === id)),
     addUser: (user) => {
         user.id = currentId++
         users.push(user)
+        return user
     },
     updateUser: (id, updatedUser) => {
         const userIndex = users.findIndex(x=>x.id === id)
